@@ -15,17 +15,19 @@ void save_model_sample();
 
 int main()
 {
-    //unsigned seed = (unsigned)time(NULL); // 取得時間序列
-    //srand(97); // 以時間序列當亂數種子
+    unsigned seed = (unsigned)time(NULL); // 取得時間序列
+    srand(seed);
+    //srand(87343545); // 以時間序列當亂數種子
+    int inputSize = 784;
+    int outputSize = 10;
 
-
-    int inputSize = 4;
-    int outputSize = 3;
-    int population_size = 15;
-    const int evolution_time = 10000;
+    // int inputSize = 4;
+    // int outputSize = 3;
+    int population_size = 50;
+    const int evolution_time = 500;
     auto pop = make_unique<Population>(inputSize, outputSize, population_size);
-    pop->enableGrowthState();
-    // pop->disableGrothState();
+    // pop->enableGrowthState();
+    pop->disableGrothState();
     pop->showInfo();
     cout << "***************************start***************************" << endl;
     for (int i = 0; i < evolution_time; i++)

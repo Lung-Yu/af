@@ -44,11 +44,11 @@ inline vector<double> get_real_data(string full_file_path)
 inline string get_current_folder_name(bool is_train_mode)
 {
     if (is_train_mode)
-        //       return string("/media/lungyu/9e06a864-1801-4ef8-8b5a-d45c2ded9305/MNIST_data/train/");
-        return string("/tmp/train/");
+        return string("/media/lungyu/9e06a864-1801-4ef8-8b5a-d45c2ded9305/MNIST_data/train/");
+    // return string("/tmp/train/");
     else
-        return string("/tmp/test/");
-    //        return string("/media/lungyu/9e06a864-1801-4ef8-8b5a-d45c2ded9305/MNIST_data/test/");
+        // return string("/tmp/test/");
+        return string("/media/lungyu/9e06a864-1801-4ef8-8b5a-d45c2ded9305/MNIST_data/test/");
 }
 
 DataHelper::DataHelper()
@@ -66,8 +66,8 @@ void DataHelper::TrainingMode()
     this->file_names.clear();
     this->isTrain = true;
 
-    //    string dir = string("/media/lungyu/9e06a864-1801-4ef8-8b5a-d45c2ded9305/MNIST_data/train");
-    string dir = string("/tmp/train");
+    string dir = string("/media/lungyu/9e06a864-1801-4ef8-8b5a-d45c2ded9305/MNIST_data/train");
+    // string dir = string("/tmp/train");
     this->file_names = getdir(dir);
 }
 
@@ -76,8 +76,8 @@ void DataHelper::InferenceMode()
     this->file_names.clear();
     this->isTrain = false;
 
-    //    string dir = string("/media/lungyu/9e06a864-1801-4ef8-8b5a-d45c2ded9305/MNIST_data/test");
-    string dir = string("/tmp/test");
+    string dir = string("/media/lungyu/9e06a864-1801-4ef8-8b5a-d45c2ded9305/MNIST_data/test");
+    // string dir = string("/tmp/test");
     this->file_names = getdir(dir);
 }
 
@@ -121,10 +121,10 @@ std::vector<double> DataHelper::getOutputs()
 
     char label_char = '0';
 
-    if(this->isTrain)
+    if (this->isTrain)
         label_char = filename[6];
     else
-        label_char = filename[5];    
+        label_char = filename[5];
     int label_idx = label_char - '0';
     // cout << "file name = " << filename << "\tlabel char = " << label_char << "\t get output label = " << label_idx << endl;
 
