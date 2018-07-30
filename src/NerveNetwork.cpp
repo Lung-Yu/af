@@ -111,68 +111,177 @@ shared_ptr<NerveNeuron> NerveNetwork::find_neuron(int id)
 }
 void NerveNetwork::train_SGD(int times)
 {
-    for (int i = 0; i < times; i++)
-    {
-        auto data_helper = make_shared<DataHelper>();
-        data_helper->TrainingMode();
+    double acc_new = 0 , acc_old = 0;
+    double error_new = 0 , error_old = 0;
 
-        for (int j = 0; j < data_helper->batch_size(); j++)
+    auto data_helper = make_shared<DataHelper>();
+    data_helper->TrainingMode();
+
+    int i = 0;
+    int data_size = data_helper->batch_size();
+    int itrs = 0;
+    do
+    {
+        acc_old = get_valid_accuracy();
+
+        if (i < data_size)
+            i++;
+        else
         {
-            this->inference(data_helper);
-            int idx = 0;
-            double error = 0;
-            for (auto const &out : this->out_nodes)
-            {
-                error = this->accumulate_error[idx++];
-                //cout << "train[ "<< i <<" ] ... <error>=" << error << endl;
-                out->notifyError(error);
-                out->adjust_all();
-            }
-            // cout << this->genome->genomme_id << " train time = [" << i << "/" << times << "]"
-            //      << "\tloss " << loss << endl;
+            auto data_helper = make_shared<DataHelper>();
+            data_helper->TrainingMode();
+            i = 0;
         }
-    }
+
+        this->inference(data_helper);
+
+        int idx = 0;
+        error_new = 0;
+        for (auto const &out : this->out_nodes)
+        {
+            double error = this->accumulate_error[idx++];
+            out->notifyError(error);
+            out->adjust_all();
+            error_new += error_new;
+        }
+        acc_new = get_valid_accuracy();
+
+        if(itrs == 0)
+            error_old = error_new;
+
+    } while (acc_new >= acc_old  && (itrs++ < times) && (error_old != error_new));
+
+    //new sgd stop by error
+    // double error_old = 10000;
+    // double error_new = 0;
+
+    // auto data_helper = make_shared<DataHelper>();
+    // data_helper->TrainingMode();
+
+    // int i = 0;
+    // int data_size = data_helper->batch_size();
+
+    // do
+    // {
+
+    //     if (i < data_size)
+    //     {
+    //         i++;
+    //     }
+    //     else
+    //     {
+    //         auto data_helper = make_shared<DataHelper>();
+    //         data_helper->TrainingMode();
+    //         i = 0;
+    //     }
+
+    //     this->inference(data_helper);
+
+    //     error_new = 0;
+    //     int idx = 0;
+    //     for (auto const &out : this->out_nodes)
+    //     {
+    //         double error = this->accumulate_error[idx++];
+    //         out->notifyError(error);
+    //         out->adjust_all();
+    //         error_new += error;
+    //     }
+
+    // } while (error_old > error_new);
+
+    //old version
+    // for (int i = 0; i < times; i++)
+    // {
+    //     auto data_helper = make_shared<DataHelper>();
+    //     data_helper->TrainingMode();
+
+    //     for (int j = 0; j < data_helper->batch_size(); j++)
+    //     {
+
+    //         // if( NEAT::randfloat() > 0.8 ){
+    //         //     data_helper->move_next();
+    //         //     continue;
+    //         // }
+
+    //         this->inference(data_helper);
+    //         int idx = 0;
+    //         double error = 0;
+    //         for (auto const &out : this->out_nodes)
+    //         {
+    //             error = this->accumulate_error[idx++];
+    //             //cout << "train[ "<< i <<" ] ... <error>=" << error << endl;
+    //             out->notifyError(error);
+    //             out->adjust_all();
+    //         }
+    //         // cout << this->genome->genomme_id << " train time = [" << i << "/" << times << "]"
+    //         //      << "\tloss " << loss << endl;
+    //     }
+    // }
 }
 void NerveNetwork::train(int times)
 {
-    // double total_loss = 0;
-    for (int i = 0; i < times; i++)
-    {
-        this->inference(true);
-        // this->inference(true);
-        // cout << this->genome->genomme_id << " train time = [" << i << "/" << times << "]"
-        //      << "\tloss " << loss << endl;
+    double error_old = 10000;
+    double error_new = 0;
 
-        int idx = 0;
-        double error = 0;
-        for (auto const &out : this->out_nodes)
+    do
+    {
+        auto data_helper = make_shared<DataHelper>();
+        data_helper->TrainingMode();
+        int out_size = data_helper->getOutputSize();
+        double errors[out_size];
+        int data_size = data_helper->batch_size();
+
+        for (int j = 0; j < data_size; j++)
         {
-            error = this->accumulate_error[idx++];
-            //cout << "train[ "<< i <<" ] ... <error>=" << error << endl;
-            out->notifyError(error);
-            out->adjust_all();
+            this->inference(data_helper);
+
+            int idx = 0;
+            for (auto const &out : this->out_nodes)
+            {
+                errors[idx] += this->accumulate_error[idx++];
+            }
         }
-    }
+
+        error_new = 0;
+        for (int j = 0; j < out_size; j++)
+        {
+            double error = errors[j] / data_size;
+            this->out_nodes[j]->notifyError(error);
+            error_new += error;
+        }
+    } while (error_old > error_new);
 }
 
 double NerveNetwork::get_train_accuracy()
 {
-    return get_accuracy(true);
+    return get_accuracy(1);
 }
 
 double NerveNetwork::get_inference_accuracy()
 {
-    return get_accuracy(false);
+    return get_accuracy(2);
+}
+double NerveNetwork::get_valid_accuracy()
+{
+    return get_accuracy(3);
 }
 
-double NerveNetwork::get_accuracy(bool train_mod)
+double NerveNetwork::get_accuracy(int mode)
 {
     // cout << "get_accuracy mod = " << train_mod << endl;
     auto data_helper = make_shared<DataHelper>();
-    if (train_mod)
+    switch (mode)
+    {
+    case 1:
         data_helper->TrainingMode();
-    else
+        break;
+    case 2:
         data_helper->InferenceMode();
+        break;
+    case 3:
+        data_helper->ValidMode();
+        break;
+    }
 
     int batch_size = data_helper->batch_size();
     double accuracy_total = 0;
@@ -196,7 +305,7 @@ double NerveNetwork::get_accuracy(bool train_mod)
             outputs.push_back(out);
         }
         // cout << "get output data done." << endl;
-        
+
         int desire_size = desires.size();
         int predit_size = outputs.size();
 
@@ -294,7 +403,7 @@ double NerveNetwork::inference(std::shared_ptr<DataHelper> data_helper)
     return loss;
 }
 
-double NerveNetwork::inference(bool isTrain)
+double NerveNetwork::inference(int mode)
 {
     this->accumulate_error.clear();
     //執行一個batch size 的檢測
@@ -303,10 +412,18 @@ double NerveNetwork::inference(bool isTrain)
     //建立資料處理器,協助取得資料
     auto data_helper = make_shared<DataHelper>();
 
-    if (isTrain)
+    switch (mode)
+    {
+    case 1:
         data_helper->TrainingMode();
-    else
+        break;
+    case 2:
         data_helper->InferenceMode();
+        break;
+    case 3:
+        data_helper->ValidMode();
+        break;
+    }
 
     int batch_size = data_helper->batch_size();
 

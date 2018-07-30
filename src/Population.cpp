@@ -110,10 +110,15 @@ void Population::separate_species()
 void Population::evolution()
 {
     this->reproduce();
-    this->natural_seletion();
+    
 
     if (this->IsEnableGroth())
+    {
         this->organism_growth_up(); //所有神經網路進行訓練
+    }
+
+    this->into_population_from_pool();
+    this->natural_seletion();
 }
 
 void Population::reproduce_agitation()
@@ -144,8 +149,8 @@ void Population::organism_growth_up()
     cout << "[growing up]\t";
 
 #pragma omp parallel for
-    for (int i = 0; i < (int)this->organisms.size(); i++)
-        this->organisms[i]->growthUp();
+    for (int i = 0; i < (int)this->new_organisms_pool.size(); i++)
+        this->new_organisms_pool[i]->growthUp();
 }
 
 void Population::calculate_new_organisms_fitness()
@@ -156,7 +161,10 @@ void Population::calculate_new_organisms_fitness()
     {
         this->new_organisms_pool[i]->evolution();
     }
+}
 
+void Population::into_population_from_pool()
+{
     //排序將比較好的保留下來
     sort(this->new_organisms_pool.begin(), this->new_organisms_pool.end(), organisms_order_by_fitness_and_race); //依照fitness 進行排序
 
@@ -306,6 +314,7 @@ void Population::mutation_reduce_node(std::shared_ptr<Organism> org)
         this->new_organisms_pool.push_back(mutation_org);
     }
 }
+
 void Population::mutation_reduce_link(std::shared_ptr<Organism> org)
 {
     double val = NEAT::randfloat();
@@ -317,6 +326,7 @@ void Population::mutation_reduce_link(std::shared_ptr<Organism> org)
         this->new_organisms_pool.push_back(mutation_org);
     }
 }
+
 void Population::natural_seletion()
 {
     // this->separate_species();
@@ -383,6 +393,11 @@ void Population::save_best_organism(char *filename)
     string file_name(filename);
     model_saver->Save(file_name);
 }
+std::shared_ptr<Organism> Population::getBest(){
+    auto best_org = this->organisms[0];
+    return best_org;
+}
+
 void Population::report_out()
 {
     auto best_org = this->organisms[0];
@@ -395,9 +410,10 @@ void Population::report_out()
     }
 
     cout << "[INFO] Best organism [" << best_org->getOrganismId()
-         << "] fitness(loss)=" << best_org->getFitness()
-         << " train accuracy=" << best_org->getTrainAccuracy()
-         << " valid accuracy=" << best_org->getAccuracy() << endl;
+         << "] loss=" << best_org->getFitness()
+         << " train-accuracy = " << best_org->getTrainAccuracy()
+         << " valid-accuracy = "<< best_org->getValidAccuracy()
+         << " test-accuracy = " << best_org->getAccuracy() << endl;
 }
 void Population::showInfo()
 {
@@ -406,21 +422,22 @@ void Population::showInfo()
     //    cout << "* genome id " << this->genome_id << endl;
     //    cout << "******************************************" << endl;
 
-    auto org = this->organisms[0];
-    cout << "* evoluation..."
-         << "[INFO] Best organism [" << setw(3) << setfill('0') << org->getOrganismId()
-         << "]-> fitness(loss) = " << setw(8) << setprecision(8) << org->getFitness()
-         << "\ttrain accuracy = " << setw(8) << setprecision(8) << org->getTrainAccuracy()
-         << "\tvalid accuracy = " << setw(8) << setprecision(8) << org->getAccuracy()
-         << " * organisms size " << this->organisms.size() << endl;
+    // auto org = this->organisms[0];
+    // cout << "* evoluation..."
+    //      << "[INFO] Best organism [" << setw(3) << setfill('0') << org->getOrganismId()
+    //      << "]-> loss = " << setw(8) << setprecision(8) << org->getFitness()
+    //      << "\ttrain accuracy = " << setw(8) << setprecision(8) << org->getTrainAccuracy()
+    //      << "\ttest accuracy = " << setw(8) << setprecision(8) << org->getAccuracy()
+    //      << " * organisms size " << this->organisms.size() << endl;
 
     for (auto const &org : this->organisms)
     {
         cout << "* evoluation..."
              << "\t[INFO] organism [" << setw(3) << setfill('0') << org->getOrganismId()
-             << "]-> fitness(loss) = " << setprecision(8) << org->getFitness()
+             << "]-> loss = " << setprecision(8) << org->getFitness()
              << "\ttrain accuracy = " << setprecision(8) << org->getTrainAccuracy()
-             << "\tvalid accuracy = " << setprecision(8) << org->getAccuracy() << endl;
+             << "\tvalid accuracy = " << setprecision(8) << org->getValidAccuracy()
+             << "\ttest accuracy = " << setprecision(8) << org->getAccuracy() << endl;
     }
 }
 
@@ -445,6 +462,7 @@ bool organisms_order_by_fitness_and_race(std::shared_ptr<Organism> i, std::share
             return i->getLoss() < j->getLoss();
     }
     else
+        //return (i->getTrainAccuracy() > j->getTrainAccuracy()); // max -> min
         return (i->getTrainAccuracy() > j->getTrainAccuracy()); // max -> min
 
     // return i->getTrainAccuracy() > j->getTrainAccuracy();

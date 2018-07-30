@@ -32,6 +32,28 @@ inline bool isNan(float fN)
 
 int NerveSynapse::calculate_delta(double error)
 {
+    // double basic_loss = 1 * NEAT::learning_rate * this->inNode->getAxon(); //學習速率 * 激勵函數的導函數
+
+    // //輸出層的節點權重
+    // if (this->outNode->nodeInfo->getNodeType() == NODE_TYPE::Output)
+    // {
+    //     this->delta_weight = basic_loss * error; //如果是輸出層的權重,loss 剛好就是 loss function的導函數
+    //     this->outNode->node_delta += this->delta_weight;
+        
+    // }
+    // else //隱藏層權重
+    // {
+    //     double hidden_delta = this->outNode->calc_node_error(this->outNode->node_delta);
+    //     this->delta_weight = basic_loss * hidden_delta;
+    //     this->inNode->node_delta += hidden_delta;
+    // }
+
+    // // cout << this->inNode->node_id << "-" << this->outNode->node_id << "\t delta=" << this->delta_weight << endl;
+
+    // this->inNode->notifyError(basic_loss);
+
+    //double basic_loss = 1 * NEAT::learning_rate * this->inNode->getAxon(); //學習速率 * 激勵函數的導函數
+
     //輸出層的節點權重
     if (this->outNode->nodeInfo->getNodeType() == NODE_TYPE::Output)//如果是輸出層的權重,loss 剛好就是 loss function的導函數
     {

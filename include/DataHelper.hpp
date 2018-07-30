@@ -41,6 +41,7 @@ public:
   int getOutputSize();
 
   void TrainingMode();
+  void ValidMode();
   void InferenceMode();
 
   std::vector<double> getInputs();

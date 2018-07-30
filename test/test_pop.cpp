@@ -13,18 +13,22 @@ using namespace std;
 void test_innovation();
 void save_model_sample();
 
+void run(const int population_size,const int evolution_time,int inputSize,int outputSize,char* model_name,char* model_finish);
+
 int main()
 {
     unsigned seed = (unsigned)time(NULL); // 取得時間序列
     srand(seed);
-    //srand(87343545); // 以時間序列當亂數種子
-    int inputSize = 784;
-    int outputSize = 10;
+    run(50,250,784,10,"model-mnist2","model-mnist2");
+    // run(50,250,178,2,"model-Arrhythmiat","model-Arrhythmiat");
+    // run(50,250,276,2,"model-EpilepticSeizure2","model-finsh-EpilepticSeizure2");
+    // run(50,250,8,3,"model-abalone","model-finsh-abalone");
+    // run(50,250,59,2,"model-sportsArticles2","model-finsh-sportsArticles2");
 
-    // int inputSize = 4;
-    // int outputSize = 3;
-    int population_size = 50;
-    const int evolution_time = 500;
+    return 0;
+}
+
+void run(const int population_size,const int evolution_time,int inputSize,int outputSize,char* model_name,char* model_finish){
     auto pop = make_unique<Population>(inputSize, outputSize, population_size);
     // pop->enableGrowthState();
     pop->disableGrothState();
@@ -35,15 +39,17 @@ int main()
         cout << "evolution [" << i << "/" << evolution_time << "]";
         pop->evolution();
         pop->report_out();
-        // pop->showInfo();
-    }
+        pop->save_best_organism(model_name);
 
+
+        if(pop->getBest()->getTrainAccuracy() >= 0.95)
+            break;
+    }
+    pop->save_best_organism(model_finish);
     auto info_control = GeneInfoController::getInstance();
     info_control->showInfo();
     auto innovation = Innovation::getInstance();
     innovation->showInfo();
-
-    return 0;
 }
 
 void test_innovation()

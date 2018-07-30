@@ -45,7 +45,7 @@ void MeanSquaredError::calculate()
 
 double MeanSquaredError::mse(double predit, double desire)
 {
-    double loss = (desire - predit) * (desire - predit);
+    double loss =0.5* (desire - predit) * (desire - predit);
 
     // std::cout << "desire = " << desire << "\tpredit = " << predit << "\tdiff = " << (desire - predit) << std::endl;
 

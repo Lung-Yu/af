@@ -26,7 +26,9 @@ class Organism
     double fitness;
     double accuracy;
     double accuracy_train;
+    double accuracy_valid;
     double loss;
+    
 
   public:
     Organism(std::shared_ptr<Genome> g);
@@ -44,7 +46,8 @@ class Organism
     void mutationReduceNode();
     void mutationReduceLink();
     void growthUp();
-
+  
+    double getValidAccuracy();
     double getAccuracy();
     double getTrainAccuracy();
     double getLoss();

@@ -63,6 +63,7 @@ class Population
     void mutation_link(std::shared_ptr<Organism> org);
     void mutation_reduce_node(std::shared_ptr<Organism> org);
     void mutation_reduce_link(std::shared_ptr<Organism> org);
+    void into_population_from_pool();
     void disturb_at_pool();
     bool IsEnableGroth();
   public:
@@ -77,6 +78,7 @@ class Population
     void enableGrowthState();
     void disableGrothState();
     void save_best_organism(char *filename);
+    std::shared_ptr<Organism> getBest();
 };
 
 bool organisms_order_by_fitness_and_race(std::shared_ptr<Organism> i, std::shared_ptr<Organism> j);

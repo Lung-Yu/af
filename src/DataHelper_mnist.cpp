@@ -35,7 +35,8 @@ inline vector<double> get_real_data(string full_file_path)
     while (fin.getline(buffer_line, sizeof(buffer_line), ','))
     {
         double val = atof(buffer_line);
-        datas.push_back(val / 255);
+        //datas.push_back(val / 255);
+        datas.push_back(val);
     }
 
     return datas;

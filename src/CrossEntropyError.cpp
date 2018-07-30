@@ -45,7 +45,9 @@ void MeanSquaredError::calculate()
 
 double MeanSquaredError::mse(double predit, double desire)
 {
-    double loss = -(desire * log(predit));
+    // double loss = -(desire * log(predit + 0.0000000001));
+
+    double loss = -(desire - predit);
     // std::cout << "desire = " << desire << "\tpredit = " << predit << "\tdiff = " << (desire - predit) << std::endl;
 
     return loss;
@@ -53,7 +55,8 @@ double MeanSquaredError::mse(double predit, double desire)
 
 double MeanSquaredError::differential_mse(double predit, double desire)
 {
-    double error = -desire * (1 / predit);
+    // double error = -desire * (1 / predit+0.0000000001);
+    double error = (desire -  predit) * (desire -  predit);
     return error;
 }
 //用於顯示評估其損失函數

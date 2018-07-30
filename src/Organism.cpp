@@ -33,6 +33,7 @@ void Organism::evolution_fitness()
     this->accuracy_train = calculate_accuracy_train();
     auto net = make_shared<NerveNetwork>(this->gemone);
     this->loss = net->inference(true);
+    this->accuracy_valid = net->get_valid_accuracy();
     // cout << "[" << this->gemone->genomme_id << "]\tloss at inference evolution_fitness " << this->loss << endl;
     this->fitness = this->loss;
 
@@ -43,7 +44,7 @@ void Organism::evolution_fitness()
 void Organism::growthUp()
 {
     auto net = make_shared<NerveNetwork>(this->gemone);
-    //net->train(this->evolution_time);
+    // net->train(this->evolution_time);
     net->train_SGD(this->evolution_time);
     // cout << "[" << this->gemone->genomme_id << "] growthUp\ttrain loss before= " << old_loss << ",\ttrain loss after= " << new_loss << endl;
     auto new_gemone = net->toGenome();
@@ -51,6 +52,10 @@ void Organism::growthUp()
     // cout << this->gemone->genomme_id << "\t growthup old_loss = " << old_loss << "\t new_loss" << new_loss << endl;
 
     this->evolution_fitness(); //計算相關參數
+}
+
+double Organism::getValidAccuracy(){
+    return this->accuracy_valid;
 }
 
 double Organism::getAccuracy()
@@ -119,13 +124,15 @@ std::shared_ptr<Organism> Organism::crossover(int new_org_id, std::shared_ptr<Or
         if (idx_p1 == gene1_node_size)
         {
             auto node2 = org->gemone->nodes[idx_p2];
-            offspring_nodes.push_back(node2);
+            //if (NEAT::randfloat() < 0.5)
+                offspring_nodes.push_back(node2);
             idx_p2++;
         }
         else if (idx_p2 == gene2_node_size)
         {
             auto node1 = this->gemone->nodes[idx_p1];
-            offspring_nodes.push_back(node1);
+            //if (NEAT::randfloat() < 0.5)
+                offspring_nodes.push_back(node1);
             idx_p1++;
         }
         else
@@ -140,12 +147,14 @@ std::shared_ptr<Organism> Organism::crossover(int new_org_id, std::shared_ptr<Or
             }
             else if (node1->getNodeId() < node2->getNodeId())
             {
-                offspring_nodes.push_back(node1);
+                //if (NEAT::randfloat() < 0.5)
+                    offspring_nodes.push_back(node1);
                 idx_p1++;
             }
             else
             {
-                offspring_nodes.push_back(node2);
+                //if (NEAT::randfloat() < 0.5)
+                    offspring_nodes.push_back(node2);
                 idx_p2++;
             }
         }
