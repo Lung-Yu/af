@@ -26,7 +26,23 @@ testNerveNetwork: NEAT.o Innovation.o Genome.o test_nerve_network.o GeneLink.o G
 test_iris:GeneModelSaver.o test_pop.o NEAT.o DataHelper_iris.o Population_alone.o Organism.o Innovation.o Genome.o GeneLink.o GeneNode.o NerveNetwork.o NerveNeuron_alone.o NerveSynapse.o MeanSquaredError.o GeneInfoController.o
 	$(COMPILER) $(FOLDER_PATH) -o test_iris.out ./objects/GeneModelSaver.o ./objects/test_pop.o ./objects/NEAT.o ./objects/Innovation.o ./objects/Genome.o ./objects/NerveNeuron.o ./objects/NerveSynapse.o ./objects/NerveNetwork.o ./objects/GeneLink.o ./objects/GeneNode.o ./objects/MeanSquaredError.o ./objects/Organism.o ./objects/Population.o ./objects/DataHelper_iris.o ./objects/GeneInfoController.o -fopenmp
 
-test_mnist:GeneModelSaver.o test_pop.o NEAT.o DataHelper_mnist.o Population_alone.o Organism.o Innovation.o Genome.o GeneLink.o GeneNode.o NerveNetwork.o NerveNeuron_alone.o NerveSynapse.o MeanSquaredError.o GeneInfoController.o
+# test_mnist:GeneModelSaver.o test_pop.o NEAT.o DataHelper_mnist.o Population_alone.o Organism.o Innovation.o Genome.o GeneLink.o GeneNode.o NerveNetwork.o NerveNeuron_alone.o NerveSynapse.o MeanSquaredError.o GeneInfoController.o
+# 	$(COMPILER) $(FOLDER_PATH) -o test_mnist.out ./objects/GeneModelSaver.o ./objects/test_pop.o ./objects/NEAT.o ./objects/Innovation.o ./objects/Genome.o ./objects/NerveNeuron.o ./objects/NerveSynapse.o ./objects/NerveNetwork.o ./objects/GeneLink.o ./objects/GeneNode.o ./objects/MeanSquaredError.o ./objects/Organism.o ./objects/Population.o ./objects/DataHelper_mnist.o ./objects/GeneInfoController.o -fopenmp
+
+test_Arrhythmiat:GeneModelSaver.o test_pop.o NEAT.o DataHelper_Arrhythmiat.o Population_alone.o Organism.o Innovation.o Genome.o GeneLink.o GeneNode.o NerveNetwork.o NerveNeuron_alone.o NerveSynapse.o MeanSquaredError.o GeneInfoController.o
+	$(COMPILER) $(FOLDER_PATH) -o test_Arrhythmiat.out ./objects/GeneModelSaver.o ./objects/test_pop.o ./objects/NEAT.o ./objects/Innovation.o ./objects/Genome.o ./objects/NerveNeuron.o ./objects/NerveSynapse.o ./objects/NerveNetwork.o ./objects/GeneLink.o ./objects/GeneNode.o ./objects/MeanSquaredError.o ./objects/Organism.o ./objects/Population.o ./objects/DataHelper_Arrhythmiat.o ./objects/GeneInfoController.o -fopenmp
+
+test_EpilepticSeizure:GeneModelSaver.o test_pop.o NEAT.o DataHelper_EpilepticSeizure.o Population_alone.o Organism.o Innovation.o Genome.o GeneLink.o GeneNode.o NerveNetwork.o NerveNeuron_alone.o NerveSynapse.o MeanSquaredError.o GeneInfoController.o
+	$(COMPILER) $(FOLDER_PATH) -o test_EpilepticSeizure.out ./objects/GeneModelSaver.o ./objects/test_pop.o ./objects/NEAT.o ./objects/Innovation.o ./objects/Genome.o ./objects/NerveNeuron.o ./objects/NerveSynapse.o ./objects/NerveNetwork.o ./objects/GeneLink.o ./objects/GeneNode.o ./objects/MeanSquaredError.o ./objects/Organism.o ./objects/Population.o ./objects/DataHelper_EpilepticSeizure.o ./objects/GeneInfoController.o -fopenmp
+
+test_abalone:GeneModelSaver.o test_pop.o NEAT.o DataHelper_abalone.o Population_alone.o Organism.o Innovation.o Genome.o GeneLink.o GeneNode.o NerveNetwork.o NerveNeuron_alone.o NerveSynapse.o MeanSquaredError.o GeneInfoController.o
+	$(COMPILER) $(FOLDER_PATH) -o test_abalone.out ./objects/GeneModelSaver.o ./objects/test_pop.o ./objects/NEAT.o ./objects/Innovation.o ./objects/Genome.o ./objects/NerveNeuron.o ./objects/NerveSynapse.o ./objects/NerveNetwork.o ./objects/GeneLink.o ./objects/GeneNode.o ./objects/MeanSquaredError.o ./objects/Organism.o ./objects/Population.o ./objects/DataHelper_abalone.o ./objects/GeneInfoController.o -fopenmp
+
+test_sportsArticles:GeneModelSaver.o test_pop.o NEAT.o DataHelper_SportsArticles.o Population.o Organism.o Innovation.o Genome.o GeneLink.o GeneNode.o NerveNetwork.o NerveNeuron_alone.o NerveSynapse.o MeanSquaredError.o GeneInfoController.o
+	$(COMPILER) $(FOLDER_PATH) -o test_sportsArticles.out ./objects/GeneModelSaver.o ./objects/test_pop.o ./objects/NEAT.o ./objects/Innovation.o ./objects/Genome.o ./objects/NerveNeuron.o ./objects/NerveSynapse.o ./objects/NerveNetwork.o ./objects/GeneLink.o ./objects/GeneNode.o ./objects/MeanSquaredError.o ./objects/Organism.o ./objects/Population.o ./objects/DataHelper_SportsArticles.o ./objects/GeneInfoController.o -fopenmp
+
+
+test_mnist:GeneModelSaver.o test_pop.o NEAT.o DataHelper_mnist.o Population.o Organism.o Innovation.o Genome.o GeneLink.o GeneNode.o NerveNetwork.o NerveNeuron_alone.o NerveSynapse.o MeanSquaredError.o GeneInfoController.o
 	$(COMPILER) $(FOLDER_PATH) -o test_mnist.out ./objects/GeneModelSaver.o ./objects/test_pop.o ./objects/NEAT.o ./objects/Innovation.o ./objects/Genome.o ./objects/NerveNeuron.o ./objects/NerveSynapse.o ./objects/NerveNetwork.o ./objects/GeneLink.o ./objects/GeneNode.o ./objects/MeanSquaredError.o ./objects/Organism.o ./objects/Population.o ./objects/DataHelper_mnist.o ./objects/GeneInfoController.o -fopenmp
 
 testPop:GeneModelSaver.o test_pop.o NEAT.o DataHelper_mnist.o Population.o Organism.o Innovation.o Genome.o GeneLink.o GeneNode.o NerveNetwork.o NerveNeuron.o NerveSynapse.o MeanSquaredError.o GeneInfoController.o
@@ -89,7 +105,7 @@ NerveSynapse.o: NerveSynapse.cpp
 NerveNetwork.o: NerveNetwork.cpp
 	@echo Compiling NerveNetwork class
 	@mkdir -p objects
-	@$(COMPILER) $(CFLAGS) -c $< -o ./objects/NerveNetwork.o
+	@$(COMPILER) $(CFLAGS) -c $< -o ./objects/NerveNetwork.o -fopenmp
 
 GeneLink.o: GeneLink.cpp
 	@echo Compiling GeneLink class
@@ -121,10 +137,33 @@ DataHelper_xor.o: DataHelper_xor.cpp
 	@mkdir -p objects
 	@$(COMPILER) $(CFLAGS) -c $< -o ./objects/DataHelper_xor.o
 
-DataHelper_mnist.o: DataHelper_mnist.cpp
-	@echo Compiling DataHelper_mnist.cpp class
+DataHelper_SportsArticles.o: DataHelper_SportsArticles.cpp
+	@echo Compiling DataHelper_SportsArticles.cpp class
 	@mkdir -p objects
+	#@$(COMPILER) $(CFLAGS) -c $< -o ./objects/DataHelper_mnist.o
+	@$(COMPILER) $(CFLAGS) -c $< -o ./objects/DataHelper_SportsArticles.o
+
+DataHelper_abalone.o: DataHelper_abalone.cpp
+	@echo Compiling DataHelper_abalone.cpp class
+	@mkdir -p objects
+	#@$(COMPILER) $(CFLAGS) -c $< -o ./objects/DataHelper_mnist.o
+	@$(COMPILER) $(CFLAGS) -c $< -o ./objects/DataHelper_abalone.o
+
+DataHelper_mnist.o: DataHelper_nMNist.cpp
+	@echo Compiling DataHelper_nMNist.cpp class
+	@mkdir -p objects
+	#@$(COMPILER) $(CFLAGS) -c $< -o ./objects/DataHelper_mnist.o
 	@$(COMPILER) $(CFLAGS) -c $< -o ./objects/DataHelper_mnist.o
+
+DataHelper_Arrhythmiat.o: DataHelper_Arrhythmiat.cpp
+	@echo Compiling DataHelper_Arrhythmiat.cpp class
+	@mkdir -p objects
+	@$(COMPILER) $(CFLAGS) -c $< -o ./objects/DataHelper_Arrhythmiat.o
+
+DataHelper_EpilepticSeizure.o: DataHelper_EpilepticSeizure.cpp
+	@echo Compiling DataHelper_EpilepticSeizure.cpp class
+	@mkdir -p objects
+	@$(COMPILER) $(CFLAGS) -c $< -o ./objects/DataHelper_EpilepticSeizure.o
 
 DataHelper_f.o: DataHelper_f.cpp
 	@echo Compiling DataHelper_f.cpp class
