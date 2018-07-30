@@ -58,7 +58,7 @@ void DataHelper::ValidMode()
     this->desire_datas.clear();
 
     this->isTrain = true;
-    string train_file("EpilepticSeizureValid.txt");
+    string train_file("dataset/EpilepticSeizure_valid.txt");
     vector<vector<double>> datas = read_file(train_file);
 
     for (auto const &item : datas)
@@ -114,7 +114,7 @@ void DataHelper::TrainingMode()
     this->desire_datas.clear();
 
     this->isTrain = true;
-    string train_file("EpilepticSeizureTrain.txt");
+    string train_file("dataset/EpilepticSeizure_train.txt");
     vector<vector<double>> datas = read_file(train_file);
 
     for (auto const &item : datas)
@@ -171,7 +171,7 @@ void DataHelper::InferenceMode()
     this->desire_datas.clear();
 
     this->isTrain = false;
-    string test_file("EpilepticSeizureTest.txt");
+    string test_file("dataset/EpilepticSeizure_test.txt");
     vector<vector<double>> datas = read_file(test_file);
 
     for (auto const &item : datas)

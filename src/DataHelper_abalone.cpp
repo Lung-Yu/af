@@ -58,7 +58,7 @@ void DataHelper::ValidMode()
     this->desire_datas.clear();
 
     this->isTrain = true;
-    string train_file("Arrhythmiatrain.txt");
+    string train_file("dataset/abalone_valid.txt");
     vector<vector<double>> datas = read_file(train_file);
 
     for (auto const &item : datas)
@@ -115,7 +115,7 @@ void DataHelper::TrainingMode()
     this->desire_datas.clear();
 
     this->isTrain = true;
-    string train_file("Arrhythmiatrain.txt");
+    string train_file("dataset/abalone_train.txt");
     vector<vector<double>> datas = read_file(train_file);
 
     for (auto const &item : datas)
@@ -172,7 +172,7 @@ void DataHelper::InferenceMode()
     this->desire_datas.clear();
 
     this->isTrain = false;
-    string test_file("Arrhythmiatest.txt");
+    string test_file("dataset/abalone_test.txt");
     vector<vector<double>> datas = read_file(test_file);
 
     for (auto const &item : datas)

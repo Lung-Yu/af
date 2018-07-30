@@ -57,7 +57,7 @@ void DataHelper::ValidMode()
     this->desire_datas.clear();
 
     this->isTrain = true;
-    string train_file("mnist_valid.txt");
+    string train_file("dataset/mnist_valid.txt");
     vector<vector<double>> datas = read_file(train_file);
 
     for (auto const &item : datas)
@@ -113,7 +113,7 @@ void DataHelper::TrainingMode()
     this->desire_datas.clear();
 
     this->isTrain = true;
-    string train_file("mnist_train.txt");
+    string train_file("dataset/mnist_train.txt");
     vector<vector<double>> datas = read_file(train_file);
 
     for (auto const &item : datas)
@@ -170,7 +170,7 @@ void DataHelper::InferenceMode()
     this->desire_datas.clear();
 
     this->isTrain = false;
-    string test_file("mnist_test.txt");
+    string test_file("dataset/mnist_test.txt");
     vector<vector<double>> datas = read_file(test_file);
 
     for (auto const &item : datas)

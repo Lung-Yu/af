@@ -58,7 +58,7 @@ void DataHelper::ValidMode()
     this->desire_datas.clear();
 
     this->isTrain = true;
-    string train_file("SportsArticles_valid.txt");
+    string train_file("dataset/SportsArticles_valid.txt");
     vector<vector<double>> datas = read_file(train_file);
 
     for (auto const &item : datas)
@@ -114,7 +114,7 @@ void DataHelper::TrainingMode()
     this->desire_datas.clear();
 
     this->isTrain = true;
-    string train_file("SportsArticles_train.txt");
+    string train_file("dataset/SportsArticles_train.txt");
     vector<vector<double>> datas = read_file(train_file);
 
     for (auto const &item : datas)
@@ -171,7 +171,7 @@ void DataHelper::InferenceMode()
     this->desire_datas.clear();
 
     this->isTrain = false;
-    string test_file("SportsArticles_test.txt");
+    string test_file("dataset/SportsArticles_test.txt");
     vector<vector<double>> datas = read_file(test_file);
 
     for (auto const &item : datas)
